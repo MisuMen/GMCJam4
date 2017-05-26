@@ -5,9 +5,30 @@
   </Configs>
   <NewExtensions/>
   <sounds name="sound"/>
-  <sprites name="sprites"/>
+  <sprites name="sprites">
+    <sprite>sprites\sprite0</sprite>
+  </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
+  <scripts name="scripts">
+    <script>scripts\m3d_start.gml</script>
+    <script>scripts\m3d_end.gml</script>
+    <script>scripts\m3d_model_create.gml</script>
+    <script>scripts\d3d_triangle.gml</script>
+    <script>scripts\m3d_model_floor.gml</script>
+    <script>scripts\m3d_model_wall.gml</script>
+    <script>scripts\m3d_model_block.gml</script>
+    <script>scripts\m3d_model_cone.gml</script>
+    <script>scripts\m3d_model_cylinder.gml</script>
+    <script>scripts\m3d_model_ellipsoid.gml</script>
+    <script>scripts\m3d_model_finish.gml</script>
+    <script>scripts\m3d_model_terrain.gml</script>
+    <script>scripts\m3d_model_destroy.gml</script>
+    <script>scripts\m3d_set_projection.gml</script>
+    <script>scripts\m3d_add_transform.gml</script>
+    <script>scripts\m3d_model_draw.gml</script>
+    <script>scripts\m3d_get_height.gml</script>
+  </scripts>
   <help>
     <rtf>help.rtf</rtf>
   </help>
