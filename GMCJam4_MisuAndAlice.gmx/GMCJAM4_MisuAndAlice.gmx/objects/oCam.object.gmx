@@ -29,32 +29,45 @@
 z = 8
 dir=0
 ang=8
-len=32
+len=24
 rot=0
-side=0
+
+spd = 1
+hsp = 0
+vsp = 0
+grav=0.2
+zheight=0
 
 m3d_start()
 d3d_set_hidden(1)
 d3d_set_culling(0)
 /////////////MODELS////////////////////////
-model = m3d_model_create()
+globalvar dude,monkey;
 //sea = m3d_model_create()
+model = m3d_model_create()
+monkey = m3d_model_create()
 piso = m3d_model_create()
 terra = m3d_model_create()
-m3d_model_floor(piso,0,0,0,256,256,0,1,1,0);
+
+m3d_model_floor(piso,0,0,0,2048,2048,0,1,1,0);
 m3d_model_block(model,-2,-2,8, 2,2,0, 1,1,1);
-//d3d_model_terrain(sea,sprite1,0,0,0,256,256,0.1,8,8,1,1);
-dude=m3d_model_terrain(terra,sprite0,0,0,0,256,256,0.5,32,32,1,1);
+m3d_model_block(monkey,-3,-3,5, 3,3,0, 1,1,1);
+//d3d_model_terrain(sea,sprite1,0,0,0,512,512,0.1,8,8,1,1);
+
+dude=m3d_model_terrain(terra,sprite0,0,0,0,2048,2048,1,64,64,1,1);
+
 m3d_model_finish(model)
 m3d_model_finish(terra)
 m3d_model_finish(piso)
+m3d_model_finish(monkey)
 //m3d_model_finish(sea)
 /////////////////TEXTURES//////////////////
 tex1 = sprite_get_texture(tex0,0);
 tex2 = sprite_get_texture(tex0,1);
 tex3 = sprite_get_texture(tex0,2);
-d3d_set_fog(1,0,1,200)
-
+d3d_set_fog(1,make_colour_rgb(128,165,255),64,500)
+///////////////SPAWN////////////////////
+instance_create(1024,1024,oMonky)
 </string>
           </argument>
         </arguments>
@@ -77,14 +90,16 @@ d3d_set_fog(1,0,1,200)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var ang1 = -sign(mouse_x-(window_get_width()/2))*(mouse_x&lt;&gt;(window_get_width()/2));
+            <string>///Movements and Rotations
+var ang1 = -sign(mouse_x-(window_get_width()/2))*(mouse_x&lt;&gt;(window_get_width()/2));
 var ang2 = -sign(mouse_y-(window_get_height()/2))*(mouse_y&lt;&gt;(window_get_height()/2));
-var angp = point_distance(mouse_x,mouse_y,window_get_width()/2,window_get_height()/2);
+//var angp = point_distance(mouse_x,mouse_y,window_get_width()/2,window_get_height()/2);
 dir -= ang1*2;//(keyboard_check(vk_left)-keyboard_check(vk_right));
 dir = dir mod 360
-ang -= (((ang2*(angp&gt;1))*2)*(ang&gt;-89));//(keyboard_check(vk_up)*(ang&lt;89))-(keyboard_check(vk_down)
-var kp1 = (keyboard_check(ord('W'))-keyboard_check(ord('S')));
-var kp2 = (keyboard_check(ord('A'))-keyboard_check(ord('D')));
+ang -= ((ang2*2)*(ang&gt;-89));//(keyboard_check(vk_up)*(ang&lt;89))-(keyboard_check(vk_down)
+
+var kp1 = (keyboard_check(ord('W'))-keyboard_check(ord('S')))*spd;
+var kp2 = (keyboard_check(ord('A'))-keyboard_check(ord('D')))*spd;
 
 if !abs(kp2)
 {
@@ -123,6 +138,7 @@ window_mouse_set(window_get_width()/2,window_get_height()/2)
 m3d_model_destroy(terra)
 //m3d_model_destroy(sea)
 m3d_model_destroy(piso)
+m3d_model_destroy(monkey)
 buffer_delete(dude)
 m3d_end()
 </string>
@@ -170,13 +186,15 @@ m3d_end()
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>var zheight = m3d_get_height_new(dude,x,y,256,256,32,32,0,0,0.5);
+            <string>zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
 m3d_set_projection(0,x,y,z+zheight,dir,ang,len,0,0,1,60,800/450,1,1000)
 
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,tex2,1)
 m3d_model_draw(terra,0,0,0,0,0,0,1,1,1,tex1,1)
-rot = rot mod 360;
-m3d_model_draw(model,x,y,zheight,0,0,rot,1,1,1,tex3,1);
+
+m3d_model_draw(model,x,y,zheight,0,0,-dir,1,1,1,tex3,1);
+with(oMonky)
+{m3d_model_draw(monkey,x,y,z,0,0,dir,1,1,1,-1,1)}
 </string>
           </argument>
         </arguments>
