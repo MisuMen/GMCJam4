@@ -4,7 +4,10 @@
     <Config>Configs\Default</Config>
   </Configs>
   <NewExtensions/>
-  <sounds name="sound"/>
+  <sounds name="sound">
+    <sound>sound\ms_jollyland</sound>
+    <sound>sound\ms_atsea</sound>
+  </sounds>
   <sprites name="sprites">
     <sprite>sprites\sprite0</sprite>
     <sprite>sprites\tex0</sprite>
@@ -31,6 +34,9 @@
     <script>scripts\m3d_get_height.gml</script>
     <script>scripts\m3d_get_height_new.gml</script>
   </scripts>
+  <shaders name="shaders">
+    <shader type="GLSLES">shaders\shd_depth.shader</shader>
+  </shaders>
   <objects name="objects">
     <object>objects\oCam</object>
     <object>objects\oMonky</object>

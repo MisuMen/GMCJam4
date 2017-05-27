@@ -329,12 +329,14 @@ draw_text(4,4,string(active))
           <argument>
             <kind>1</kind>
             <string>m3d_set_projection(0,x,y,z+9,dir,ang,len,0,0,1,60,800/450,1,1000)
-
+shader_set(shd_depth)
+shader_set_uniform_f(shader_get_uniform(shd_depth,"inv"),-1)
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,tex2,1)
 m3d_model_draw(terra,0,0,0,0,0,0,1,1,1,tex1,1)
-
+shader_set_uniform_f(shader_get_uniform(shd_depth,"inv"),1)
 m3d_model_draw(model,x,y,z,0,0,-dir,1,1,1,tex3,1);
 with(oMonky){m3d_model_draw(monkey,x,y,z,0,0,dir,1,1,1,-1,1)}
+shader_reset()
 </string>
           </argument>
         </arguments>
