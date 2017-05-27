@@ -26,13 +26,14 @@
           <argument>
             <kind>1</kind>
             <string>z = 0
+stun=0
 zheight=0;
 heart = 10;
 back = 0
 warn = 0
 attack=0
-prevx=0
-prevy=0
+xprev=0
+yprev=0
 spd=0.25
 hsp=0
 vsp=0
@@ -41,6 +42,32 @@ jsp=4
 dir=0
 grav=0.5
 jump=0
+push=0
+knok=0
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>stun=0
+spd=0.25
 </string>
           </argument>
         </arguments>
@@ -111,13 +138,47 @@ warn = 1
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if instance_number(oCam)==0 exit
+            <string>///Physics
+if instance_number(oCam)==0 exit
 
 dir = point_direction(x,y,oCam.x,oCam.y);
 zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
-var pp = point_distance_3d(oCam.x,oCam.y,oCam.z+oCam.zheight,x,y,z);
+var pp = point_distance_3d(oCam.x,oCam.y,oCam.z,x,y,z);
+///ATTACK
+ if (oCam.atk)&amp;&amp;(pp&lt;16)&amp;&amp;(stun==0)
+ {
+  var pd=point_direction(oCam.x,oCam.y,x,y);
+  var m = 0;
+    if (oCam.dir &lt; pd+45)&amp;&amp;(oCam.dir &lt; pd-45)
+    {m=1}
+    if (pd&gt;0)&amp;&amp;(pd&lt;45)
+    {
+     if (oCam.dir&gt;270){m=1}
+    }
+    if (pd&lt;360)&amp;&amp;(pd&gt;315)
+    {
+     if (oCam.dir&lt;90){m=1}
+    }
+  if (m) {--heart; stun=1; spd=0; alarm[2]=40}
+ }
+///////////////////////
+if (pp&lt;8) &amp;&amp; (stun==0)
+{
+ if (oCam.stun==0)
+ {
+  with(oCam)
+  {
+   life--
+   stun=1
+   alarm[0]=60
+  }
+  stun=1//give time to back away
+  spd=0
+  alarm[2]=40
+ }
+}
 
-if (abs(oCam.z+oCam.zheight-z)&lt;24)
+if (abs(oCam.z-z)&lt;24)
 {
  if (pp&lt;64)
  {
@@ -126,23 +187,7 @@ if (abs(oCam.z+oCam.zheight-z)&lt;24)
  else attack=0
 }else attack=0
 ////////////PHYSICS//////////////////
- if (hsp &amp;&amp; vsp) &amp;&amp; (jump==0)
- {
-  if (pp&lt;12)&amp;&amp;(attack)
-  {
-   ///pounce
-   jump=1
-   xprev=oCam.x
-   yprev=oCam.y
-  }
- }
 if (dsp&gt;-8) dsp-=grav
-
-if (z &lt; zheight+1)&amp;&amp;(z &gt; zheight-1)
-{
- dsp = jump * jsp;
-}
-
 if (z+dsp &lt; zheight)
 {
  while(z-1 &gt; zheight)
@@ -151,14 +196,30 @@ if (z+dsp &lt; zheight)
  }
  jump=0
  dsp=0
+ spd=0.25
  z = zheight
 }
-///if player spotted, attack!
-if (attack &amp;&amp; warn==2)
+ if (jump==0)&amp;&amp;(stun==0)
+ {
+  if (pp&lt;16)&amp;&amp;(attack)
+  {
+   ///pounce
+   spd=1
+   jump=1
+   xprev=oCam.x
+   yprev=oCam.y
+   dsp = jump * jsp;
+  }
+ }
+///if player spotted, MOVE!
+if (attack &amp;&amp; warn==2)&amp;&amp;(stun==0)
 {
- var dd = point_direction(x,y,oCam.x,oCam.y);
- hsp = lengthdir_x(spd,dd);
- vsp = lengthdir_y(spd,dd);
+ if (jump==0) 
+ {var dd = point_direction(x,y,oCam.x,oCam.y);}
+ else 
+ {var dd = point_direction(x,y,xprev,yprev);}
+  hsp = lengthdir_x(spd,dd);
+  vsp = lengthdir_y(spd,dd);
 
  if (place_meeting(x+hsp,y,oSolid))
  {
@@ -176,9 +237,36 @@ if (attack &amp;&amp; warn==2)
   }
   vsp=0
  }
+}
  x+=hsp
  y+=vsp
+ z+=dsp
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Other stuff
+if (warn==1)
+{
+ dir = point_direction(x,y,oCam.x,oCam.y);
 }
+if heart&lt;=0 {instance_destroy()}
 </string>
           </argument>
         </arguments>

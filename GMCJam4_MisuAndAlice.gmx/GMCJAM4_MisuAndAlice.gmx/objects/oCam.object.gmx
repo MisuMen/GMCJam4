@@ -26,16 +26,24 @@
           <argument>
             <kind>1</kind>
             <string>/// MAKING A GAME
-z = 8
+z = 0
 dir=0
 ang=8
 len=24
 rot=0
-
-spd = 1
+atk=0
+spd = 0.3
 hsp = 0
 vsp = 0
+dsp = 0
+jsp = 1
+jump=0
 grav=0.2
+knok=0
+push=0
+life=8
+stun=0
+active=1
 zheight=0
 
 m3d_start()
@@ -73,6 +81,75 @@ instance_create(1024,1024,oMonky)
         </arguments>
       </action>
     </event>
+    <event eventtype="2" enumb="2">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>active=1
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>atk=0
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>stun=0
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="3" enumb="0">
       <action>
         <libid>1</libid>
@@ -91,6 +168,7 @@ instance_create(1024,1024,oMonky)
           <argument>
             <kind>1</kind>
             <string>///Movements and Rotations
+zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
 var ang1 = -sign(mouse_x-(window_get_width()/2))*(mouse_x&lt;&gt;(window_get_width()/2));
 var ang2 = -sign(mouse_y-(window_get_height()/2))*(mouse_y&lt;&gt;(window_get_height()/2));
 //var angp = point_distance(mouse_x,mouse_y,window_get_width()/2,window_get_height()/2);
@@ -103,15 +181,78 @@ var kp2 = (keyboard_check(ord('A'))-keyboard_check(ord('D')))*spd;
 
 if !abs(kp2)
 {
-x -= lengthdir_x(kp1,-dir);
-y -= lengthdir_y(kp1,-dir);
+hsp = lengthdir_x(kp1,-dir);
+vsp = lengthdir_y(kp1,-dir);
 }
 else
 {
-x -= lengthdir_x(kp2,-dir+(90));
-y -= lengthdir_y(kp2,-dir+(90));
+hsp = lengthdir_x(kp2,-dir+(90));
+vsp = lengthdir_y(kp2,-dir+(90));
 }
+//////////////////PHYSICS////////////////////////////
+if (dsp&lt;8) dsp-=grav
+if (z+dsp &lt; zheight)
+{
+ while(z-1 &gt; zheight)
+ {
+  z-=1
+ }
+ jump=0
+ dsp=0
+ spd=0.3
+ z = zheight
+}
+//////Jump//////
+////////////////
+ if (place_meeting(x+hsp,y,oSolid))
+ {
+  while(!place_meeting(x+(sign(hsp)*(1/10000)),y,oSolid))
+  {
+   x += (sign(hsp)*(1/10000));
+  }
+  hsp=0
+ }
+ if (place_meeting(x,y+vsp,oSolid))
+ {
+  while(!place_meeting(x,y+(sign(vsp)*(1/10000)),oSolid))
+  {
+   y += (sign(vsp)*(1/10000));
+  }
+  vsp=0
+ }
+ x-=hsp
+ y-=vsp
+ z+=dsp
+/////////////////////////////////////////////////////
 window_mouse_set(window_get_width()/2,window_get_height()/2)
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Other stuff
+var aka = mouse_check_button_pressed(mb_left);
+if (aka &amp;&amp; active)
+{
+ atk=1
+ active=0
+ alarm[2]=10
+}
 </string>
           </argument>
         </arguments>
@@ -164,6 +305,7 @@ m3d_end()
           <argument>
             <kind>1</kind>
             <string>///Draw 2D GUI here
+draw_text(4,4,string(active))
 </string>
           </argument>
         </arguments>
@@ -186,15 +328,13 @@ m3d_end()
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
-m3d_set_projection(0,x,y,z+zheight,dir,ang,len,0,0,1,60,800/450,1,1000)
+            <string>m3d_set_projection(0,x,y,z+9,dir,ang,len,0,0,1,60,800/450,1,1000)
 
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,tex2,1)
 m3d_model_draw(terra,0,0,0,0,0,0,1,1,1,tex1,1)
 
-m3d_model_draw(model,x,y,zheight,0,0,-dir,1,1,1,tex3,1);
-with(oMonky)
-{m3d_model_draw(monkey,x,y,z,0,0,dir,1,1,1,-1,1)}
+m3d_model_draw(model,x,y,z,0,0,-dir,1,1,1,tex3,1);
+with(oMonky){m3d_model_draw(monkey,x,y,z,0,0,dir,1,1,1,-1,1)}
 </string>
           </argument>
         </arguments>
