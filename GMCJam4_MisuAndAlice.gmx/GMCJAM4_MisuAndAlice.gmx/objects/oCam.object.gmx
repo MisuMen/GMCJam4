@@ -186,6 +186,10 @@ draw_set_colour(c_white)
           <argument>
             <kind>1</kind>
             <string>///Movements and Rotations
+
+//dialogue lock
+if (!instance_exists(oDialogue)) {
+
 zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
 var ang1 = -sign(mouse_x-(window_get_width()/2))*(mouse_x&lt;&gt;(window_get_width()/2));
 var ang2 = -sign(mouse_y-(window_get_height()/2))*(mouse_y&lt;&gt;(window_get_height()/2));
@@ -209,6 +213,8 @@ else
 hsp = lengthdir_x(kp2,-dir+(90));
 vsp = lengthdir_y(kp2,-dir+(90));
 }
+
+}
 //////////////////PHYSICS////////////////////////////
 if (dsp&lt;8) dsp-=grav
 if (z+dsp &lt; zheight)
@@ -224,6 +230,10 @@ if (z+dsp &lt; zheight)
 }
 //////Jump//////
 ////////////////
+
+//dialogue lock
+if (!instance_exists(oDialogue)) {
+
  if (place_meeting(x+hsp,y,oSolid))
  {
   while(!place_meeting(x+(sign(hsp)*(1/10000)),y,oSolid))
@@ -243,8 +253,10 @@ if (z+dsp &lt; zheight)
  x-=hsp
  y-=vsp
  z+=dsp
+
 /////////////////////////////////////////////////////
 window_mouse_set(window_get_width()/2,window_get_height()/2)
+}
 </string>
           </argument>
         </arguments>
@@ -368,6 +380,34 @@ m3d_model_draw(gras1,0,0,-0.1,0,0,0,1,1,1,tex1,1)
 //shader_reset()
 ///////////////////////RESET FOG///////////////////////////////
 d3d_set_fog(1,make_colour_rgb(128,165,255),64,500)
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="81">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// Makes a dummy dialogue
+
+// you can use the code below to actually setup the dialogue, I guess?
+
+dialogue_create("Hello, world!", "This is multiline#dialogue text", "That's it for a dummy dialogue for now, isn't it?");
+
 </string>
           </argument>
         </arguments>

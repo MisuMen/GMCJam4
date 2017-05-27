@@ -11,6 +11,7 @@
   <sprites name="sprites">
     <sprite>sprites\sprite0</sprite>
     <sprite>sprites\tex0</sprite>
+    <sprite>sprites\sDialogue</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -37,6 +38,12 @@
     <script>scripts\rim.gml</script>
     <script>scripts\grass.gml</script>
     <script>scripts\grass_radius.gml</script>
+    <scripts name="Draw">
+      <script>scripts\draw_sprite_9slice.gml</script>
+    </scripts>
+    <scripts name="Dialogue">
+      <script>scripts\dialogue_create.gml</script>
+    </scripts>
   </scripts>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shd_depth.shader</shader>
@@ -45,6 +52,7 @@
     <object>objects\oCam</object>
     <object>objects\oMonky</object>
     <object>objects\oSolid</object>
+    <object>objects\oDialogue</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\room0</room>
