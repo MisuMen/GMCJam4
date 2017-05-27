@@ -1,4 +1,4 @@
-///m3d_model_ellipsoid(ind,x1,y1,z1,width,height,depth,t1,t2,step,closed)
+///m3d_model_ellipsoid(ind,x1,y1,z1,width,height,depth,t1,t2,xstep,ystep)
 var ind = argument0;
 
 var ww = argument4;

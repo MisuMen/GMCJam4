@@ -7,7 +7,9 @@ draw_set_colour(c_white)
 draw_set_alpha(1)
 global.M_INDEX = 0
 global.BUFFER_IND = 0
-
+CAMx=0
+CAMy=0
+CAMz=0
 global.OCT = 0;
 global.OCT_W = 0;
 global.OCT_H = 0;

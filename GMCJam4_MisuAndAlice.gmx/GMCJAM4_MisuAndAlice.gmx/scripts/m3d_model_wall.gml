@@ -1,4 +1,4 @@
-///m3d_model_wall(ind,x1,y1,z1,x2,y2,z2,t1,t2)
+///m3d_model_wall(ind,x1,y1,z1,x2,y2,z2,t1,t2,flip)
 var x1 = argument1;
 var y1 = argument2;
 var z1 = argument3;

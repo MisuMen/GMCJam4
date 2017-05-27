@@ -1,5 +1,4 @@
 ///m3d_set_projection(ind,x,y,z,dir,ang,distance,xup,yup,zup,fov,aspect,near,far)
-var CAMx, CAMy, CAMz;
 //Camera position
 CAMx = cos(argument4*(pi/180))* cos(argument5*(pi/180));
 CAMy = sin(argument4*(pi/180))* cos(argument5*(pi/180));

@@ -33,6 +33,10 @@
     <script>scripts\m3d_model_draw.gml</script>
     <script>scripts\m3d_get_height.gml</script>
     <script>scripts\m3d_get_height_new.gml</script>
+    <script>scripts\tree.gml</script>
+    <script>scripts\rim.gml</script>
+    <script>scripts\grass.gml</script>
+    <script>scripts\grass_radius.gml</script>
   </scripts>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shd_depth.shader</shader>

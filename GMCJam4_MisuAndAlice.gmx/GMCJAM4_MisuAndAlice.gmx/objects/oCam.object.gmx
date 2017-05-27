@@ -55,27 +55,45 @@ globalvar dude,monkey;
 model = m3d_model_create()
 monkey = m3d_model_create()
 piso = m3d_model_create()
-terra = m3d_model_create()
+terra = m3d_model_create();
+tree1 = m3d_model_create();
+gras1 = m3d_model_create();
+stone = m3d_model_create();
+tree(tree1,0,0,8,32,28,12);
 
+draw_set_colour(make_colour_rgb(130,165,255));
 m3d_model_floor(piso,0,0,0,2048,2048,0,1,1,0);
+draw_set_colour(make_colour_rgb(255,120,255));
 m3d_model_block(model,-2,-2,8, 2,2,0, 1,1,1);
+draw_set_colour(make_colour_rgb(255,255,255));
 m3d_model_block(monkey,-3,-3,5, 3,3,0, 1,1,1);
 //d3d_model_terrain(sea,sprite1,0,0,0,512,512,0.1,8,8,1,1);
-
+draw_set_colour(make_colour_rgb(60,255,70))
 dude=m3d_model_terrain(terra,sprite0,0,0,0,2048,2048,1,64,64,1,1);
-
+/////////grass////////////
+grass_radius(gras1,875,870,2,0,8)
+///STONE
+draw_set_colour(c_silver)
+m3d_model_ellipsoid(stone,0,0,0,5,4,2,1,1,5,4)
+draw_set_colour(c_white)
+//////////////////////////
 m3d_model_finish(model)
 m3d_model_finish(terra)
 m3d_model_finish(piso)
 m3d_model_finish(monkey)
+m3d_model_finish(tree1)
+m3d_model_finish(gras1)
+m3d_model_finish(stone)
 //m3d_model_finish(sea)
 /////////////////TEXTURES//////////////////
-tex1 = sprite_get_texture(tex0,0);
-tex2 = sprite_get_texture(tex0,1);
-tex3 = sprite_get_texture(tex0,2);
+global.tex=sprite_get_texture(tex0,0);
+tex1 = sprite_get_texture(tex0,1);
+tex2 = sprite_get_texture(tex0,2);
+tex3 = sprite_get_texture(tex0,3);
 d3d_set_fog(1,make_colour_rgb(128,165,255),64,500)
 ///////////////SPAWN////////////////////
 instance_create(1024,1024,oMonky)
+draw_set_colour(c_white)
 </string>
           </argument>
         </arguments>
@@ -174,7 +192,9 @@ var ang2 = -sign(mouse_y-(window_get_height()/2))*(mouse_y&lt;&gt;(window_get_he
 //var angp = point_distance(mouse_x,mouse_y,window_get_width()/2,window_get_height()/2);
 dir -= ang1*2;//(keyboard_check(vk_left)-keyboard_check(vk_right));
 dir = dir mod 360
-ang -= ((ang2*2)*(ang&gt;-89));//(keyboard_check(vk_up)*(ang&lt;89))-(keyboard_check(vk_down)
+if (ang&lt;=-5) {ang=-4}
+if (ang&gt;=70) {ang=69}
+ang -= ((ang2*2)*(ang&gt;-5)*(ang&lt;70));//(keyboard_check(vk_up)*(ang&lt;89))-(keyboard_check(vk_down)
 
 var kp1 = (keyboard_check(ord('W'))-keyboard_check(ord('S')))*spd;
 var kp2 = (keyboard_check(ord('A'))-keyboard_check(ord('D')))*spd;
@@ -280,6 +300,9 @@ m3d_model_destroy(terra)
 //m3d_model_destroy(sea)
 m3d_model_destroy(piso)
 m3d_model_destroy(monkey)
+m3d_model_destroy(gras1)
+m3d_model_destroy(tree1)
+m3d_model_destroy(stone)
 buffer_delete(dude)
 m3d_end()
 </string>
@@ -305,7 +328,7 @@ m3d_end()
           <argument>
             <kind>1</kind>
             <string>///Draw 2D GUI here
-draw_text(4,4,string(active))
+draw_text(4,4,string(zheight))
 </string>
           </argument>
         </arguments>
@@ -329,14 +352,22 @@ draw_text(4,4,string(active))
           <argument>
             <kind>1</kind>
             <string>m3d_set_projection(0,x,y,z+9,dir,ang,len,0,0,1,60,800/450,1,1000)
-shader_set(shd_depth)
-shader_set_uniform_f(shader_get_uniform(shd_depth,"inv"),-1)
-m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,tex2,1)
-m3d_model_draw(terra,0,0,0,0,0,0,1,1,1,tex1,1)
-shader_set_uniform_f(shader_get_uniform(shd_depth,"inv"),1)
-m3d_model_draw(model,x,y,z,0,0,-dir,1,1,1,tex3,1);
-with(oMonky){m3d_model_draw(monkey,x,y,z,0,0,dir,1,1,1,-1,1)}
-shader_reset()
+//shader_set(shd_depth)
+//rim(x,y,1.0,500.0,-1,128,165,255)
+m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra,0,0,0,0,0,0,1,1,1,global.tex,1)
+
+//rim(x,y,1.0,500.0,1,128,165,255)
+m3d_model_draw(model,x,y,z,0,0,-dir,1,1,1,global.tex,1);
+with(oMonky){m3d_model_draw(monkey,x,y,z,0,0,dir,1,1,1,global.tex,1)}
+//////////////////////Trees and other stuff/////////////////////
+var tz = m3d_get_height_new(dude,900,900,2048,2048,64,64,0,0,1);
+m3d_model_draw(tree1,900,900,tz-1,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(stone,700,1000,tz-1,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(gras1,0,0,-0.1,0,0,0,1,1,1,tex1,1)
+//shader_reset()
+///////////////////////RESET FOG///////////////////////////////
+d3d_set_fog(1,make_colour_rgb(128,165,255),64,500)
 </string>
           </argument>
         </arguments>
