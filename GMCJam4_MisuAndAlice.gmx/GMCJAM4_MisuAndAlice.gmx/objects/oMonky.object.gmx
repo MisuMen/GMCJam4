@@ -44,6 +44,17 @@ grav=0.5
 jump=0
 push=0
 knok=0
+frame[0]=monkey
+frame[1]=monkey2
+frame[2]=monkey3
+frame[3]=monkey4
+frame[4]=monkey5
+frame[5]=monkey6
+frame[6]=monkey5
+frame[7]=monkey4
+frame[8]=monkey3
+frame[9]=monkey2
+nn=0
 </string>
           </argument>
         </arguments>
@@ -140,10 +151,9 @@ warn = 1
             <kind>1</kind>
             <string>///Physics
 if instance_number(oCam)==0 exit
-
-dir = point_direction(x,y,oCam.x,oCam.y);
-zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
 var pp = point_distance_3d(oCam.x,oCam.y,oCam.z,x,y,z);
+if (pp&lt;64) {dir = point_direction(x,y,oCam.x,oCam.y);}else{jump=0; xprev=oCam.x; yprev=oCam.y; warn=0; attack=0;m=0}
+zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
 ///ATTACK
  if (oCam.atk)&amp;&amp;(pp&lt;16)&amp;&amp;(stun==0)
  {
@@ -220,6 +230,9 @@ if (attack &amp;&amp; warn==2)&amp;&amp;(stun==0)
  {var dd = point_direction(x,y,xprev,yprev);}
   hsp = lengthdir_x(spd,dd);
   vsp = lengthdir_y(spd,dd);
+  nn+=0.25
+  nn = nn mod 9;
+  //if nn&lt;0 nn=8
 
  if (place_meeting(x+hsp,y,oSolid))
  {

@@ -25,7 +25,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>/// MAKING A GAME
+            <string>///CREATE VARIABLES
+x = 940
+y = 800
 z = 0
 dir=0
 ang=8
@@ -43,30 +45,60 @@ knok=0
 push=0
 life=8
 stun=0
+frame=0
+swingx=0
+swingy=0
 active=1
 zheight=0
-
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>/// MAKING A GAME
 m3d_start()
 d3d_set_hidden(1)
 d3d_set_culling(0)
 /////////////MODELS////////////////////////
-globalvar dude,monkey;
+globalvar dude,monkey,monkey2,monkey3,monkey4,monkey5,monkey6;
 //sea = m3d_model_create()
-model = m3d_model_create()
-monkey = m3d_model_create()
 piso = m3d_model_create()
 terra = m3d_model_create();
 tree1 = m3d_model_create();
 gras1 = m3d_model_create();
 stone = m3d_model_create();
+pot = m3d_model_create();
 tree(tree1,0,0,8,32,28,12);
-
-draw_set_colour(make_colour_rgb(130,165,255));
+//////////MONKEY CONTENT/////////////
+monk_pose()
+monk_pose_2()
+monk_pose_3()
+monk_pose_4()
+monk_pose_5()
+monk_pose_6()
+boat_model()
+draw_set_colour(make_colour_rgb(90,100,255));
 m3d_model_floor(piso,0,0,0,2048,2048,0,1,1,0);
 draw_set_colour(make_colour_rgb(255,120,255));
-m3d_model_block(model,-2,-2,8, 2,2,0, 1,1,1);
-draw_set_colour(make_colour_rgb(255,255,255));
-m3d_model_block(monkey,-3,-3,5, 3,3,0, 1,1,1);
+draw_set_colour(make_colour_rgb(80,25,15));
+m3d_model_ellipsoid(pot,0,0,0,6,6,4,1,1,8,8)
+m3d_model_ellipsoid(pot,0,0,2,3,3,1,1,1,8,8)
+
 //d3d_model_terrain(sea,sprite1,0,0,0,512,512,0.1,8,8,1,1);
 draw_set_colour(make_colour_rgb(60,255,70))
 dude=m3d_model_terrain(terra,sprite0,0,0,0,2048,2048,1,64,64,1,1);
@@ -77,23 +109,33 @@ draw_set_colour(c_silver)
 m3d_model_ellipsoid(stone,0,0,0,5,4,2,1,1,5,4)
 draw_set_colour(c_white)
 //////////////////////////
-m3d_model_finish(model)
 m3d_model_finish(terra)
 m3d_model_finish(piso)
 m3d_model_finish(monkey)
 m3d_model_finish(tree1)
 m3d_model_finish(gras1)
 m3d_model_finish(stone)
+m3d_model_finish(pot)
 //m3d_model_finish(sea)
+/////////PLAYER CONTENT////////////
+pose_0_0()
+pose_0_1()
+pose_0_2()
+pose_0_3()
+pose_0_4()
+pose_0_5()
+pose_0_6()
+pose_attack0()
 /////////////////TEXTURES//////////////////
 global.tex=sprite_get_texture(tex0,0);
 tex1 = sprite_get_texture(tex0,1);
 tex2 = sprite_get_texture(tex0,2);
 tex3 = sprite_get_texture(tex0,3);
-d3d_set_fog(1,make_colour_rgb(128,165,255),64,500)
+tex4 = sprite_get_texture(tex0,4);
+d3d_set_fog(1,c_aqua,64,500)//make_colour_rgb(120,130,255)
 ///////////////SPAWN////////////////////
 instance_create(1024,1024,oMonky)
-draw_set_colour(c_white)
+global.dialogue_active =0
 </string>
           </argument>
         </arguments>
@@ -140,6 +182,7 @@ draw_set_colour(c_white)
           <argument>
             <kind>1</kind>
             <string>atk=0
+active=1
 </string>
           </argument>
         </arguments>
@@ -283,7 +326,9 @@ if (aka &amp;&amp; active)
 {
  atk=1
  active=0
- alarm[2]=10
+  swingx=-45
+ swingy=-135
+ alarm[1]=10
 }
 </string>
           </argument>
@@ -307,14 +352,21 @@ if (aka &amp;&amp; active)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>m3d_model_destroy(model)
+            <string>m3d_model_destroy(boat)
 m3d_model_destroy(terra)
 //m3d_model_destroy(sea)
 m3d_model_destroy(piso)
-m3d_model_destroy(monkey)
 m3d_model_destroy(gras1)
 m3d_model_destroy(tree1)
 m3d_model_destroy(stone)
+m3d_model_destroy(pot)
+m3d_model_destroy(monkey)
+m3d_model_destroy(monkey2)
+m3d_model_destroy(monkey3)
+m3d_model_destroy(monkey4)
+m3d_model_destroy(monkey5)
+m3d_model_destroy(monkey6)
+pose_clear()
 buffer_delete(dude)
 m3d_end()
 </string>
@@ -340,7 +392,7 @@ m3d_end()
           <argument>
             <kind>1</kind>
             <string>///Draw 2D GUI here
-draw_text(4,4,string(zheight))
+draw_text(4,4,string(atk))
 </string>
           </argument>
         </arguments>
@@ -364,22 +416,53 @@ draw_text(4,4,string(zheight))
           <argument>
             <kind>1</kind>
             <string>m3d_set_projection(0,x,y,z+9,dir,ang,len,0,0,1,60,800/450,1,1000)
-//shader_set(shd_depth)
-//rim(x,y,1.0,500.0,-1,128,165,255)
+shader_set(shd_depth)
+rim(x,y,1.0,500.0,-1,128,165,255,1)
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(terra,0,0,0,0,0,0,1,1,1,global.tex,1)
-
-//rim(x,y,1.0,500.0,1,128,165,255)
-m3d_model_draw(model,x,y,z,0,0,-dir,1,1,1,global.tex,1);
-with(oMonky){m3d_model_draw(monkey,x,y,z,0,0,dir,1,1,1,global.tex,1)}
+m3d_model_draw(boat,900,800,8,0,0,0,1,1,1,global.tex,1)
+rim(x,y,1.0,500.0,1,128,165,255,1)
+if (keyboard_check(ord('W'))||keyboard_check(ord('S')))
+{
+if (keyboard_check(ord('W'))) frame+=0.25
+if (keyboard_check(ord('S'))) frame-=0.25
+frame = frame mod 6;
+if frame&lt;0 frame=5
+m3d_model_draw(test[floor(frame)],x,y,z+1,0,0,-dir+180,1,1,1,global.tex,1);
+body()
+}
+else
+{
+if (atk)
+{
+ pose_draw()
+ body()
+}
+else
+{
+frame=0
+m3d_model_draw(pose0,x,y,z+1,0,0,-dir+180,1,1,1,global.tex,1);
+rim(x,y,1.0,500.0,-1,128,165,255,1)
+body()
+}
+}
+with(oMonky){m3d_model_draw(frame[floor(nn)],x,y,z,0,0,dir+180,1,1,1,global.tex,1)}
 //////////////////////Trees and other stuff/////////////////////
+rim(x,y,1.0,500.0,-1,128,165,255,1)
 var tz = m3d_get_height_new(dude,900,900,2048,2048,64,64,0,0,1);
 m3d_model_draw(tree1,900,900,tz-1,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(stone,700,1000,tz-1,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(gras1,0,0,-0.1,0,0,0,1,1,1,tex1,1)
-//shader_reset()
+tz = m3d_get_height_new(dude,870,900,2048,2048,64,64,0,0,1);
+m3d_model_draw(stone,870,900,tz,0,0,0,1,1,1,global.tex,1)
+tz = m3d_get_height_new(dude,850,870,2048,2048,64,64,0,0,1);
+rim(x,y,1.0,500.0,1,128,165,255,1)
+m3d_model_draw(pot,850,870,tz+2,0,0,0,1,1,1,global.tex,1)
+
+////Leave this last
+m3d_model_draw(gras1,0,0,-1,0,0,0,1,1,1,tex1,1)
+
+shader_reset()
 ///////////////////////RESET FOG///////////////////////////////
-d3d_set_fog(1,make_colour_rgb(128,165,255),64,500)
+//d3d_set_fog(1,make_colour_rgb(90,100,255),64,500)
 </string>
           </argument>
         </arguments>
@@ -403,11 +486,12 @@ d3d_set_fog(1,make_colour_rgb(128,165,255),64,500)
           <argument>
             <kind>1</kind>
             <string>/// Makes a dummy dialogue
-
 // you can use the code below to actually setup the dialogue, I guess?
-
+if global.dialogue_active == 0
+{
 dialogue_create("Hello, world!", "This is multiline#dialogue text", "That's it for a dummy dialogue for now, isn't it?");
-
+global.dialogue_active = 1
+}
 </string>
           </argument>
         </arguments>

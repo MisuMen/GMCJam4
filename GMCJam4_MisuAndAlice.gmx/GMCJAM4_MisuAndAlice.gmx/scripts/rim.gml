@@ -1,5 +1,6 @@
-///rim(x,y,near,far,inv,r,g,b)
+///rim(x,y,near,far,inv,r,g,b,alow)
 shader_set_uniform_f(shader_get_uniform(shd_depth,"folor"),argument5,argument6,argument7)
 shader_set_uniform_f(shader_get_uniform(shd_depth,"range"),argument2,argument3)
 shader_set_uniform_f(shader_get_uniform(shd_depth,"pos"),argument0,argument1)
 shader_set_uniform_f(shader_get_uniform(shd_depth,"inv"),argument4)
+shader_set_uniform_f(shader_get_uniform(shd_depth,"ind"),argument8)

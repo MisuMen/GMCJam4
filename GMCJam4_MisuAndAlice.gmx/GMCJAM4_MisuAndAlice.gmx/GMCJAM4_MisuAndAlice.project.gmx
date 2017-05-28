@@ -16,24 +16,28 @@
   <backgrounds name="background"/>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\m3d_start.gml</script>
-    <script>scripts\m3d_end.gml</script>
-    <script>scripts\m3d_model_create.gml</script>
-    <script>scripts\d3d_triangle.gml</script>
-    <script>scripts\m3d_model_floor.gml</script>
-    <script>scripts\m3d_model_wall.gml</script>
-    <script>scripts\m3d_model_block.gml</script>
-    <script>scripts\m3d_model_cone.gml</script>
-    <script>scripts\m3d_model_cylinder.gml</script>
-    <script>scripts\m3d_model_ellipsoid.gml</script>
-    <script>scripts\m3d_model_finish.gml</script>
-    <script>scripts\m3d_model_terrain.gml</script>
-    <script>scripts\m3d_model_destroy.gml</script>
-    <script>scripts\m3d_set_projection.gml</script>
-    <script>scripts\m3d_add_transform.gml</script>
-    <script>scripts\m3d_model_draw.gml</script>
-    <script>scripts\m3d_get_height.gml</script>
-    <script>scripts\m3d_get_height_new.gml</script>
+    <scripts name="m3d">
+      <script>scripts\m3d_start.gml</script>
+      <script>scripts\m3d_end.gml</script>
+      <script>scripts\m3d_model_create.gml</script>
+      <script>scripts\d3d_triangle.gml</script>
+      <script>scripts\m3d_model_floor.gml</script>
+      <script>scripts\m3d_model_wall.gml</script>
+      <script>scripts\m3d_model_block.gml</script>
+      <script>scripts\m3d_model_block_ext.gml</script>
+      <script>scripts\m3d_model_cone.gml</script>
+      <script>scripts\m3d_model_cylinder.gml</script>
+      <script>scripts\m3d_model_ellipsoid.gml</script>
+      <script>scripts\m3d_model_finish.gml</script>
+      <script>scripts\m3d_model_destroy.gml</script>
+      <script>scripts\m3d_set_projection.gml</script>
+      <script>scripts\m3d_add_transform.gml</script>
+      <script>scripts\m3d_get_height_new.gml</script>
+      <script>scripts\m3d_get_height.gml</script>
+      <script>scripts\m3d_model_cylinder_ext.gml</script>
+      <script>scripts\m3d_model_draw.gml</script>
+      <script>scripts\m3d_model_terrain.gml</script>
+    </scripts>
     <script>scripts\tree.gml</script>
     <script>scripts\rim.gml</script>
     <script>scripts\grass.gml</script>
@@ -44,6 +48,26 @@
     <scripts name="Dialogue">
       <script>scripts\dialogue_create.gml</script>
     </scripts>
+    <scripts name="player_md">
+      <script>scripts\pose_0_0.gml</script>
+      <script>scripts\pose_0_1.gml</script>
+      <script>scripts\pose_0_2.gml</script>
+      <script>scripts\pose_0_3.gml</script>
+      <script>scripts\pose_0_4.gml</script>
+      <script>scripts\pose_0_5.gml</script>
+      <script>scripts\pose_0_6.gml</script>
+      <script>scripts\pose_clear.gml</script>
+      <script>scripts\pose_attack0.gml</script>
+      <script>scripts\pose_draw.gml</script>
+    </scripts>
+    <script>scripts\body.gml</script>
+    <script>scripts\monk_pose.gml</script>
+    <script>scripts\monk_pose_2.gml</script>
+    <script>scripts\monk_pose_3.gml</script>
+    <script>scripts\monk_pose_4.gml</script>
+    <script>scripts\monk_pose_5.gml</script>
+    <script>scripts\monk_pose_6.gml</script>
+    <script>scripts\boat_model.gml</script>
   </scripts>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shd_depth.shader</shader>

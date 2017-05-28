@@ -50,7 +50,7 @@
           <argument>
             <kind>1</kind>
             <string>ds_list_destroy(lines);
-
+global.dialogue_active = 0
 </string>
           </argument>
         </arguments>
