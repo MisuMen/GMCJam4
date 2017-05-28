@@ -10,6 +10,9 @@
   </sounds>
   <sprites name="sprites">
     <sprite>sprites\sprite0</sprite>
+    <sprite>sprites\sprite3</sprite>
+    <sprite>sprites\sprite4</sprite>
+    <sprite>sprites\sprite5</sprite>
     <sprite>sprites\tex0</sprite>
     <sprite>sprites\sDialogue</sprite>
   </sprites>
@@ -59,15 +62,18 @@
       <script>scripts\pose_clear.gml</script>
       <script>scripts\pose_attack0.gml</script>
       <script>scripts\pose_draw.gml</script>
+      <script>scripts\body.gml</script>
     </scripts>
-    <script>scripts\body.gml</script>
-    <script>scripts\monk_pose.gml</script>
-    <script>scripts\monk_pose_2.gml</script>
-    <script>scripts\monk_pose_3.gml</script>
-    <script>scripts\monk_pose_4.gml</script>
-    <script>scripts\monk_pose_5.gml</script>
-    <script>scripts\monk_pose_6.gml</script>
+    <scripts name="monk_md">
+      <script>scripts\monk_pose.gml</script>
+      <script>scripts\monk_pose_2.gml</script>
+      <script>scripts\monk_pose_3.gml</script>
+      <script>scripts\monk_pose_4.gml</script>
+      <script>scripts\monk_pose_5.gml</script>
+      <script>scripts\monk_pose_6.gml</script>
+    </scripts>
     <script>scripts\boat_model.gml</script>
+    <script>scripts\spawn1.gml</script>
   </scripts>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shd_depth.shader</shader>
@@ -77,6 +83,10 @@
     <object>objects\oMonky</object>
     <object>objects\oSolid</object>
     <object>objects\oDialogue</object>
+    <object>objects\oBoat</object>
+    <object>objects\oTree</object>
+    <object>objects\oStone</object>
+    <object>objects\oPot</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\room0</room>

@@ -26,6 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>///CREATE VARIABLES
+a=0
+b=0
 x = 940
 y = 800
 z = 0
@@ -50,6 +52,8 @@ swingx=0
 swingy=0
 active=1
 zheight=0
+
+global.SAIL=0
 </string>
           </argument>
         </arguments>
@@ -75,15 +79,19 @@ m3d_start()
 d3d_set_hidden(1)
 d3d_set_culling(0)
 /////////////MODELS////////////////////////
-globalvar dude,monkey,monkey2,monkey3,monkey4,monkey5,monkey6;
+globalvar land,monkey,monkey2,monkey3,monkey4,monkey5,monkey6,boat,tree1,pot,stone;
 //sea = m3d_model_create()
 piso = m3d_model_create()
-terra = m3d_model_create();
 tree1 = m3d_model_create();
 gras1 = m3d_model_create();
 stone = m3d_model_create();
 pot = m3d_model_create();
 tree(tree1,0,0,8,32,28,12);
+
+terra[0,0] = m3d_model_create();
+terra[0,1] = m3d_model_create();
+terra[1,0] = m3d_model_create();
+terra[1,1] = m3d_model_create();
 //////////MONKEY CONTENT/////////////
 monk_pose()
 monk_pose_2()
@@ -92,30 +100,35 @@ monk_pose_4()
 monk_pose_5()
 monk_pose_6()
 boat_model()
-draw_set_colour(make_colour_rgb(90,100,255));
-m3d_model_floor(piso,0,0,0,2048,2048,0,1,1,0);
-draw_set_colour(make_colour_rgb(255,120,255));
+
 draw_set_colour(make_colour_rgb(80,25,15));
 m3d_model_ellipsoid(pot,0,0,0,6,6,4,1,1,8,8)
 m3d_model_ellipsoid(pot,0,0,2,3,3,1,1,1,8,8)
 
+///////////////ISLANDS/////////////////////////
+draw_set_colour(make_colour_rgb(90,100,255));
+m3d_model_floor(piso,1024,1024,0,6144,6144,0,1,1,0);
 //d3d_model_terrain(sea,sprite1,0,0,0,512,512,0.1,8,8,1,1);
 draw_set_colour(make_colour_rgb(60,255,70))
-dude=m3d_model_terrain(terra,sprite0,0,0,0,2048,2048,1,64,64,1,1);
-/////////grass////////////
-grass_radius(gras1,875,870,2,0,8)
+land[0,0]=m3d_model_terrain(terra[0,0],sprite0,0,0,0,2048,2048,1,64,64,1,1);
+land[0,1]=m3d_model_terrain(terra[0,1],sprite3,0,0,0,2048,2048,1,64,64,1,1);
+land[1,0]=m3d_model_terrain(terra[1,0],sprite4,0,0,0,2048,2048,1,64,64,1,1);
+land[1,1]=m3d_model_terrain(terra[1,1],sprite5,0,0,0,2048,2048,1,64,64,1,1);
 ///STONE
 draw_set_colour(c_silver)
 m3d_model_ellipsoid(stone,0,0,0,5,4,2,1,1,5,4)
 draw_set_colour(c_white)
 //////////////////////////
-m3d_model_finish(terra)
+
 m3d_model_finish(piso)
 m3d_model_finish(monkey)
 m3d_model_finish(tree1)
-m3d_model_finish(gras1)
 m3d_model_finish(stone)
 m3d_model_finish(pot)
+m3d_model_finish(terra[0,0])
+m3d_model_finish(terra[0,1])
+m3d_model_finish(terra[1,0])
+m3d_model_finish(terra[1,1])
 //m3d_model_finish(sea)
 /////////PLAYER CONTENT////////////
 pose_0_0()
@@ -134,7 +147,8 @@ tex3 = sprite_get_texture(tex0,3);
 tex4 = sprite_get_texture(tex0,4);
 d3d_set_fog(1,c_aqua,64,500)//make_colour_rgb(120,130,255)
 ///////////////SPAWN////////////////////
-instance_create(1024,1024,oMonky)
+spawn1()
+m3d_model_finish(gras1)
 global.dialogue_active =0
 </string>
           </argument>
@@ -233,7 +247,7 @@ active=1
 //dialogue lock
 if (!instance_exists(oDialogue)) {
 
-zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
+zheight = m3d_get_height(land[a,b],x,y,2048,2048,64,64,0,0,1);
 var ang1 = -sign(mouse_x-(window_get_width()/2))*(mouse_x&lt;&gt;(window_get_width()/2));
 var ang2 = -sign(mouse_y-(window_get_height()/2))*(mouse_y&lt;&gt;(window_get_height()/2));
 //var angp = point_distance(mouse_x,mouse_y,window_get_width()/2,window_get_height()/2);
@@ -353,7 +367,6 @@ if (aka &amp;&amp; active)
           <argument>
             <kind>1</kind>
             <string>m3d_model_destroy(boat)
-m3d_model_destroy(terra)
 //m3d_model_destroy(sea)
 m3d_model_destroy(piso)
 m3d_model_destroy(gras1)
@@ -366,8 +379,17 @@ m3d_model_destroy(monkey3)
 m3d_model_destroy(monkey4)
 m3d_model_destroy(monkey5)
 m3d_model_destroy(monkey6)
+m3d_model_destroy(houses)
+m3d_model_destroy(terra[0,0])
+m3d_model_destroy(terra[0,1])
+m3d_model_destroy(terra[1,0])
+m3d_model_destroy(terra[1,1])
+
 pose_clear()
-buffer_delete(dude)
+buffer_delete(land[0,0])
+buffer_delete(land[0,1])
+buffer_delete(land[1,0])
+buffer_delete(land[1,1])
 m3d_end()
 </string>
           </argument>
@@ -392,7 +414,7 @@ m3d_end()
           <argument>
             <kind>1</kind>
             <string>///Draw 2D GUI here
-draw_text(4,4,string(atk))
+draw_text(4,4,"X: "+string(x)+"  Y: "+string(y))
 </string>
           </argument>
         </arguments>
@@ -419,8 +441,11 @@ draw_text(4,4,string(atk))
 shader_set(shd_depth)
 rim(x,y,1.0,500.0,-1,128,165,255,1)
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra,0,0,0,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(boat,900,800,8,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[a,b],0,0,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(houses,0,0,0,0,0,0,1,1,1,global.tex,1)
+
+with(oBoat){m3d_model_draw(boat,boatx,boaty,4,0,0,-dir,1,1,1,global.tex,1)}
+
 rim(x,y,1.0,500.0,1,128,165,255,1)
 if (keyboard_check(ord('W'))||keyboard_check(ord('S')))
 {
@@ -449,17 +474,13 @@ body()
 with(oMonky){m3d_model_draw(frame[floor(nn)],x,y,z,0,0,dir+180,1,1,1,global.tex,1)}
 //////////////////////Trees and other stuff/////////////////////
 rim(x,y,1.0,500.0,-1,128,165,255,1)
-var tz = m3d_get_height_new(dude,900,900,2048,2048,64,64,0,0,1);
-m3d_model_draw(tree1,900,900,tz-1,0,0,0,1,1,1,global.tex,1)
-tz = m3d_get_height_new(dude,870,900,2048,2048,64,64,0,0,1);
-m3d_model_draw(stone,870,900,tz,0,0,0,1,1,1,global.tex,1)
-tz = m3d_get_height_new(dude,850,870,2048,2048,64,64,0,0,1);
+with(oTree) {m3d_model_draw(tree1,x,y,tz-1,0,0,0,1,1,1,global.tex,1)}
+with(oStone){m3d_model_draw(stone,x,y,tz,0,0,0,1,1,1,global.tex,1)}
 rim(x,y,1.0,500.0,1,128,165,255,1)
-m3d_model_draw(pot,850,870,tz+2,0,0,0,1,1,1,global.tex,1)
+with(oPot) {m3d_model_draw(pot,x,y,tz+2,0,0,0,1,1,1,global.tex,1)}
 
 ////Leave this last
 m3d_model_draw(gras1,0,0,-1,0,0,0,1,1,1,tex1,1)
-
 shader_reset()
 ///////////////////////RESET FOG///////////////////////////////
 //d3d_set_fog(1,make_colour_rgb(90,100,255),64,500)
