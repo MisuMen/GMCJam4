@@ -9,12 +9,16 @@
     <sound>sound\ms_atsea</sound>
   </sounds>
   <sprites name="sprites">
-    <sprite>sprites\sprite0</sprite>
-    <sprite>sprites\sprite3</sprite>
-    <sprite>sprites\sprite4</sprite>
-    <sprite>sprites\sprite5</sprite>
     <sprite>sprites\tex0</sprite>
     <sprite>sprites\sDialogue</sprite>
+    <sprite>sprites\sprite6</sprite>
+    <sprites name="texture_andMask">
+      <sprite>sprites\sprite0</sprite>
+      <sprite>sprites\sprite3</sprite>
+      <sprite>sprites\sprite4</sprite>
+      <sprite>sprites\sprite5</sprite>
+    </sprites>
+    <sprite>sprites\spr_me</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -43,7 +47,6 @@
     </scripts>
     <script>scripts\tree.gml</script>
     <script>scripts\rim.gml</script>
-    <script>scripts\grass.gml</script>
     <script>scripts\grass_radius.gml</script>
     <scripts name="Draw">
       <script>scripts\draw_sprite_9slice.gml</script>
@@ -74,19 +77,27 @@
     </scripts>
     <script>scripts\boat_model.gml</script>
     <script>scripts\spawn1.gml</script>
+    <script>scripts\cloud_model.gml</script>
   </scripts>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shd_depth.shader</shader>
   </shaders>
+  <fonts name="fonts">
+    <font>fonts\font0</font>
+  </fonts>
   <objects name="objects">
+    <objects name="CollisionMasks">
+      <object>objects\oSolid</object>
+      <object>objects\oMask_0_1</object>
+    </objects>
     <object>objects\oCam</object>
     <object>objects\oMonky</object>
-    <object>objects\oSolid</object>
     <object>objects\oDialogue</object>
     <object>objects\oBoat</object>
     <object>objects\oTree</object>
     <object>objects\oStone</object>
     <object>objects\oPot</object>
+    <object>objects\oCloud</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\room0</room>

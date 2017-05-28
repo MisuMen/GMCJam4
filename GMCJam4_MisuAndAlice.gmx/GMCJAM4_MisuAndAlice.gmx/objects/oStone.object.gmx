@@ -48,7 +48,9 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>tz = m3d_get_height_new(dude,x,y,2048,2048,64,64,0,0,1);
+            <string>var a = oCam.a;
+var b = oCam.b;
+tz = m3d_get_height_new(land[a,b],x,y,2048,2048,64,64,0,0,1);
 </string>
           </argument>
         </arguments>

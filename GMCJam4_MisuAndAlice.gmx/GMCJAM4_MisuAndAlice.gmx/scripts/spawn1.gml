@@ -4,11 +4,11 @@ m3d_model_block(houses,860,935,0, 945,1010,48,1,1,0)///UV
 m3d_model_block(houses,1100,920,0, 1150,1035,64,1,1,0)///UV
 draw_set_colour(make_colour_rgb(120,70,30))
 ///doors
-var tz = m3d_get_height(dude,1100,965,2048,2048,64,64,0,0,1);
+var tz = m3d_get_height(land[0,0],1100,965,2048,2048,64,64,0,0,1);
 m3d_model_block(houses,1100-1,955,tz+2,1101,967,tz+17,1,1,0)
-tz = m3d_get_height(dude,1100,1010,2048,2048,64,64,0,0,1);
+tz = m3d_get_height(land[0,0],1100,1010,2048,2048,64,64,0,0,1);
 m3d_model_block(houses,1100-1,1010,tz+2,1101,1017,tz+17,1,1,0)
-tz = m3d_get_height(dude,1100,1010,2048,2048,64,64,0,0,1);
+tz = m3d_get_height(land[0,0],1100,1010,2048,2048,64,64,0,0,1);
 m3d_model_block(houses,945-1,990,tz+2,946,997,tz+17,1,1,0)
 draw_set_colour(0)
 m3d_model_block(houses,860-0.5,935-0.5,47, 945+0.5,1010+0.5,48,1,1,0)///UV

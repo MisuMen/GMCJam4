@@ -150,10 +150,12 @@ warn = 1
           <argument>
             <kind>1</kind>
             <string>///Physics
+var a = oCam.a;
+var b = oCam.b;
 if instance_number(oCam)==0 exit
 var pp = point_distance_3d(oCam.x,oCam.y,oCam.z,x,y,z);
 if (pp&lt;64) {dir = point_direction(x,y,oCam.x,oCam.y);}else{jump=0; xprev=oCam.x; yprev=oCam.y; warn=0; attack=0;m=0}
-zheight = m3d_get_height(dude,x,y,2048,2048,64,64,0,0,1);
+zheight = m3d_get_height(land[a,b],x,y,2048,2048,64,64,0,0,1);
 ///ATTACK
  if (oCam.atk)&amp;&amp;(pp&lt;16)&amp;&amp;(stun==0)
  {
