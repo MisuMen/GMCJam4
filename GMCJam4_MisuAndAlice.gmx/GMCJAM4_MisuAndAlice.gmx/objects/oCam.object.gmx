@@ -84,6 +84,7 @@ m3d_start()
 d3d_set_hidden(1)
 d3d_set_culling(0)
 draw_set_font(font0)
+audio_play_sound(ms_jollyland,1,1)
 /////////////MODELS////////////////////////
 globalvar land,monkey,monkey2,monkey3,monkey4,monkey5,monkey6,boat,tree1,pot,stone,cloud;
 piso = m3d_model_create()
@@ -94,9 +95,9 @@ pot = m3d_model_create();
 tree(tree1,0,0,8,32,28,12);
 cloud_model()
 terra[0,0] = m3d_model_create();
-terra[0,1] = m3d_model_create();
-terra[1,0] = m3d_model_create();
-terra[1,1] = m3d_model_create();
+//terra[0,1] = m3d_model_create();
+//terra[1,0] = m3d_model_create();
+//terra[1,1] = m3d_model_create();
 //////////MONKEY CONTENT/////////////
 monk_pose()
 monk_pose_2()
@@ -116,10 +117,11 @@ m3d_model_floor(piso,-1024,-1024,0,5120,5120,0,1,1,0);
 //d3d_model_terrain(sea,sprite1,0,0,0,512,512,0.1,8,8,1,1);
 
 draw_set_colour(c_white)
-land[0,1]=m3d_model_terrain(terra[0,1],sprite3,0,0,0,2048,2048,1,64,64,1,1);
-land[1,0]=m3d_model_terrain(terra[1,0],sprite4,0,0,0,2048,2048,1,64,64,1,1);
-land[1,1]=m3d_model_terrain(terra[1,1],sprite5,0,0,0,2048,2048,1,64,64,1,1);
-land[0,0]=m3d_model_terrain(terra[0,0],sprite4,0,0,0,2048,2048,8,64,64,1,1);
+
+land[0,0]=m3d_model_terrain(terra[0,0],sprite0,0,0,0,2048,2048,1,64,64,1,1);
+//land[0,1]=m3d_model_terrain(terra[0,1],sprite3,0,0,0,2048,2048,1,64,64,1,1);
+//land[1,0]=m3d_model_terrain(terra[1,0],sprite4,0,0,0,2048,2048,1,64,64,1,1);
+//land[1,1]=m3d_model_terrain(terra[1,1],sprite5,0,0,0,2048,2048,1,64,64,1,1);
 
 ///STONE
 draw_set_colour(c_silver)
@@ -134,9 +136,9 @@ m3d_model_finish(tree1)
 m3d_model_finish(stone)
 m3d_model_finish(pot)
 m3d_model_finish(terra[0,0])
-m3d_model_finish(terra[0,1])
-m3d_model_finish(terra[1,0])
-m3d_model_finish(terra[1,1])
+//m3d_model_finish(terra[0,1])
+//m3d_model_finish(terra[1,0])
+//m3d_model_finish(terra[1,1])
 //m3d_model_finish(sea)
 /////////PLAYER CONTENT////////////
 pose_0_0()
@@ -273,7 +275,7 @@ _mouseh = window_get_height();
 }
 if (keyboard_check_pressed(ord('M'))) show_debug_message(string(_mousew) + "," + string(_mouseh));
 
-zheight = m3d_get_height(land[a,b],x,y,2048,2048,64,64,0,0,1);
+zheight = m3d_get_height(land[0,0],x,y,2048,2048,64,64,0,0,1);
 
 // horizontal rotation
 dir += clamp(_hsense * (_mx - _mousew/2), -15, 15);
@@ -285,7 +287,7 @@ ang = clamp(ang + _vsense * (_my - _mouseh/2), -5, 70);
 var kp1 = (keyboard_check(ord('W'))-keyboard_check(ord('S')))*spd;
 var kp2 = (keyboard_check(ord('A'))-keyboard_check(ord('D')))*spd;
 
-if !abs(kp2)
+if !abs(kp2*(1-global.onboard))
 {
 hsp = lengthdir_x(kp1,-dir);
 vsp = lengthdir_y(kp1,-dir);
@@ -320,11 +322,11 @@ if (z+dsp &lt; zheight)
 if (!instance_exists(oDialogue)) {
 if (global.onboard==0)
 {
-var checkerx = m3d_get_height(land[a,b],x-hsp,y,2048,2048,64,64,0,0,1);
-var checkery = m3d_get_height(land[a,b],x,y-vsp,2048,2048,64,64,0,0,1);
+var checkerx = m3d_get_height(land[0,0],x-hsp,y,2048,2048,64,64,0,0,1);
+var checkery = m3d_get_height(land[0,0],x,y-vsp,2048,2048,64,64,0,0,1);
  if checkerx&lt;=0//(place_meeting(x-hsp,y,oSolid))&amp;&amp;(checker
  {
-  while(m3d_get_height(land[a,b],x-(sign(hsp)*(1/10000)),y,2048,2048,64,64,0,0,1)&gt;0)//(!place_meeting(x-(sign(hsp)*(1/10000)),y,oSolid)&amp;&amp;)
+  while(m3d_get_height(land[0,0],x-(sign(hsp)*(1/10000)),y,2048,2048,64,64,0,0,1)&gt;0)//(!place_meeting(x-(sign(hsp)*(1/10000)),y,oSolid)&amp;&amp;)
   {
    x -= (sign(hsp)*(1/10000));
   }
@@ -332,7 +334,7 @@ var checkery = m3d_get_height(land[a,b],x,y-vsp,2048,2048,64,64,0,0,1);
  }
  if (checkery&lt;=0)//(place_meeting(x,y-vsp,oSolid))
  {
-  while(m3d_get_height(land[a,b],x,y-(sign(vsp)*(1/10000)),2048,2048,64,64,0,0,1)&gt;0)//!place_meeting(x,y-(sign(vsp)*(1/10000)),oSolid))
+  while(m3d_get_height(land[0,0],x,y-(sign(vsp)*(1/10000)),2048,2048,64,64,0,0,1)&gt;0)//!place_meeting(x,y-(sign(vsp)*(1/10000)),oSolid))
   {
    y -= (sign(vsp)*(1/10000));
   }
@@ -341,11 +343,12 @@ var checkery = m3d_get_height(land[a,b],x,y-vsp,2048,2048,64,64,0,0,1);
 }
 else
 {
-var checkerx = m3d_get_height(land[a,b],x-hsp,y,2048,2048,64,64,0,0,1);
-var checkery = m3d_get_height(land[a,b],x,y-vsp,2048,2048,64,64,0,0,1);
+if (x&gt;4)&amp;&amp;(x&lt;2048)&amp;&amp;(y&gt;4)&amp;&amp;(y&lt;2048){
+var checkerx = m3d_get_height(land[0,0],x-hsp,y,2048,2048,64,64,0,0,1);
+var checkery = m3d_get_height(land[0,0],x,y-vsp,2048,2048,64,64,0,0,1);
  if checkerx&gt;0//(place_meeting(x-hsp,y,oSolid))&amp;&amp;(checker
  {
-  while(m3d_get_height(land[a,b],x-(sign(hsp)*(1/10000)),y,2048,2048,64,64,0,0,1)&lt;=0)//(!place_meeting(x-(sign(hsp)*(1/10000)),y,oSolid)&amp;&amp;)
+  while(m3d_get_height(land[0,0],x-(sign(hsp)*(1/10000)),y,2048,2048,64,64,0,0,1)&lt;=0)//(!place_meeting(x-(sign(hsp)*(1/10000)),y,oSolid)&amp;&amp;)
   {
    x -= (sign(hsp)*(1/10000));
   }
@@ -353,13 +356,13 @@ var checkery = m3d_get_height(land[a,b],x,y-vsp,2048,2048,64,64,0,0,1);
  }
  if (checkery&gt;0)//(place_meeting(x,y-vsp,oSolid))
  {
-  while(m3d_get_height(land[a,b],x,y-(sign(vsp)*(1/10000)),2048,2048,64,64,0,0,1)&lt;=0)//!place_meeting(x,y-(sign(vsp)*(1/10000)),oSolid))
+  while(m3d_get_height(land[0,0],x,y-(sign(vsp)*(1/10000)),2048,2048,64,64,0,0,1)&lt;=0)//!place_meeting(x,y-(sign(vsp)*(1/10000)),oSolid))
   {
    y -= (sign(vsp)*(1/10000));
   }
   vsp=0
  }
-}
+}}
  x-=hsp
  y-=vsp
  z+=dsp
@@ -414,7 +417,8 @@ if point_distance_3d(x,y,z+10,bx,by,6)&lt;32
   }
   }
  }
- if (mouse_check_button_pressed(mb_right) &amp;&amp; global.onboard){if (collision_radio()){global.onboard=0; spd=0.5}}
+ if (x&gt;4)&amp;&amp;(x&lt;2048)&amp;&amp;(y&gt;4)&amp;&amp;(y&lt;2048){if (mouse_check_button_pressed(mb_right) &amp;&amp; global.onboard)
+ {if (collision_radio()){global.onboard=0; spd=0.5}}}
 }
 </string>
           </argument>
@@ -450,7 +454,7 @@ if (aka &amp;&amp; active)
 }
 if (global.DUNGEON==0)
 {
-if (x&gt;4)&amp;&amp;(x&lt;4092){if (y&gt;4)&amp;&amp;(y&lt;4092){a=floor(x/2048); b=floor(y/2048)}}
+//if (x&gt;4)&amp;&amp;(x&lt;4092){if (y&gt;4)&amp;&amp;(y&lt;4092){a=floor(x/2048); b=floor(y/2048)}}
 if x&gt;4096 {x=1}
 if x&lt;0 {x=4095}
 if y&gt;4096 {y=1}
@@ -480,6 +484,7 @@ if y&lt;0 {y=4095}
           <argument>
             <kind>1</kind>
             <string>m3d_model_destroy(boat)
+audio_stop_all()
 //m3d_model_destroy(sea)
 m3d_model_destroy(piso)
 m3d_model_destroy(gras1)
@@ -495,16 +500,16 @@ m3d_model_destroy(monkey6)
 m3d_model_destroy(houses)
 m3d_model_destroy(cloud)
 m3d_model_destroy(terra[0,0])
-m3d_model_destroy(terra[0,1])
-m3d_model_destroy(terra[1,0])
-m3d_model_destroy(terra[1,1])
-m3d_model_destroy(dungeon1)
-
+//m3d_model_destroy(terra[0,1])
+//m3d_model_destroy(terra[1,0])
+//m3d_model_destroy(terra[1,1])
+//m3d_model_destroy(dungeon1)
+//surface_free(sf)
 pose_clear()
 buffer_delete(land[0,0])
-buffer_delete(land[0,1])
-buffer_delete(land[1,0])
-buffer_delete(land[1,1])
+//buffer_delete(land[0,1])
+//buffer_delete(land[1,0])
+//buffer_delete(land[1,1])
 m3d_end()
 </string>
           </argument>
@@ -552,14 +557,14 @@ draw_text(4,4,"X: "+string(x)+"  Y: "+string(y))
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>m3d_set_projection(0,x,y,z+9,dir,ang,len,0,0,1,60,800/450,1,1000)
+            <string>m3d_set_projection(0,x,y,z+9,dir,ang,len,0,0,1,70,800/450,1,1000)
 shader_set(shd_depth)
 rim(x,y,1.0,500.0,-1,128,165,255,1)
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(terra[0,0],0,0,0,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra[0,1],0,2048,0,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra[1,0],2048,0,0,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra[1,1],2048,2048,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[0,0],2048,0,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[0,0],0,2048,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[0,0],2048,2048,0,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(houses,0,0,0,0,0,0,1,1,1,global.tex,1)
 
 with(oBoat){m3d_model_draw(boat,x,y,4,0,0,-dir,1,1,1,global.tex,1)}
@@ -604,35 +609,6 @@ shader_reset()
 ///////////////////////RESET FOG///////////////////////////////
 with(oCloud){m3d_model_draw(cloud,x,y,200,0,0,0,1,1,1,global.tex,1)}
 //d3d_set_fog(1,make_colour_rgb(90,100,255),64,500)
-</string>
-          </argument>
-        </arguments>
-      </action>
-    </event>
-    <event eventtype="9" enumb="81">
-      <action>
-        <libid>1</libid>
-        <id>603</id>
-        <kind>7</kind>
-        <userelative>0</userelative>
-        <isquestion>0</isquestion>
-        <useapplyto>-1</useapplyto>
-        <exetype>2</exetype>
-        <functionname></functionname>
-        <codestring></codestring>
-        <whoName>self</whoName>
-        <relative>0</relative>
-        <isnot>0</isnot>
-        <arguments>
-          <argument>
-            <kind>1</kind>
-            <string>/// Makes a dummy dialogue
-// you can use the code below to actually setup the dialogue, I guess?
-if global.dialogue_active == 0
-{
-dialogue_create("Hello, world!", "This is multiline#dialogue text", "That's it for a dummy dialogue for now, isn't it?");
-global.dialogue_active = 1
-}
 </string>
           </argument>
         </arguments>

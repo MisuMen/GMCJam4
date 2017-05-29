@@ -77,6 +77,7 @@
     </scripts>
     <script>scripts\boat_model.gml</script>
     <script>scripts\spawn1.gml</script>
+    <script>scripts\spawn2.gml</script>
     <script>scripts\cloud_model.gml</script>
     <script>scripts\dungeon1_create.gml</script>
     <script>scripts\collision_radio.gml</script>

@@ -28,6 +28,7 @@ draw_sprite(argument1,0,0,0)
 surface_reset_target()
 ///setup buffer
 buffer_get_surface(buff,sf,0,0,0)
+
 surface_free(sf)
 ///TOP
 draw_set_colour(make_colour_rgb(60,255,70))
