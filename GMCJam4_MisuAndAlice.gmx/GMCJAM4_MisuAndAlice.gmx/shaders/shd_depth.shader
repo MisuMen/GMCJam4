@@ -31,9 +31,15 @@ varying vec4 v_vColour;
 
 void main()
 {
-    //float dis = ((distance(pos,v_vPosition.xy)-range.x))/range.y;
+    float dist = length(v_vPosition);
+    float fogFactor = 1.0 /exp(dist * 0.5);
+    fogFactor = clamp( fogFactor, 0.0, 1.0 );
+ 
+
     //vec4 fog = vec4(folor*dis,1.0);
+    
     vec4 col = vec4(v_vColour.rgb*((v_vPosition.z+55.0)/80.0),v_vColour.a);
+    col.rgb = mix(vec3(100.0,120.0,170.0), col.rgb, fogFactor);
     vec3 dir = vec3( 0.5, 0.5, inv);
     vec3 lit = vec3( 0.7, 0.8, 1.0);
     float lighting = 1.0;

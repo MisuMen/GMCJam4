@@ -441,7 +441,8 @@ if point_distance(x,y,1000,1000)&lt;16
         dialogue_create("YOU DID IT!", "...", "There is nothing left for youy to do. Go now!");
          global.dialogue_active = 1
        }
-    }else
+    }
+    if GOAL==0
     {
      if global.dialogue_active == 0
      {
@@ -503,7 +504,7 @@ if (aka &amp;&amp; active)
  swingy=-135
  alarm[1]=10
 }
-if instance_number(oBalloon)==0 {GOAL=1}
+if instance_number(oBalloon)==0 &amp;&amp; global.SAIL {GOAL=1}
 if (global.DUNGEON==0)
 {
 //if (x&gt;4)&amp;&amp;(x&lt;4092){if (y&gt;4)&amp;&amp;(y&lt;4092){a=floor(x/2048); b=floor(y/2048)}}
@@ -619,9 +620,6 @@ shader_set(shd_depth)
 rim(x,y,1.0,500.0,-1,128,165,255,1)
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(terra[0,0],0,0,0,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra[0,0],2048,0,0,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra[0,0],0,2048,0,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra[0,0],2048,2048,0,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(houses,0,0,0,0,0,0,1,1,1,global.tex,1)
 with(oBalloon){m3d_model_draw(ball,x,y,9,0,0,0,1,1,1,global.tex,1)}
 var tz = m3d_get_height(land[0,0],1000,1000,2048,2048,1,1,0,0,1);
@@ -636,6 +634,7 @@ tz = m3d_get_height(land[0,0],1075,975,2048,2048,1,1,0,0,1);
 d3d_transform_add_translation(1075,975,tz+12)
 d3d_model_draw(antiroy,0,0,0,tex2)
 d3d_transform_set_identity()
+
 with(oBoat){m3d_model_draw(boat,x,y,4,0,0,-dir,1,1,1,global.tex,1)}
 
 rim(x,y,1.0,500.0,1,128,165,255,1)
@@ -667,7 +666,7 @@ with(oMonky){m3d_model_draw(frame[floor(nn)],x,y,z,0,0,dir+180,1,1,1,global.tex,
 //////////////////////Trees and other stuff/////////////////////
 rim(x,y,1.0,500.0,-1,128,165,255,1)
 with(oTree) {m3d_model_draw(tree1,x,y,tz-1,0,0,0,1,1,1,global.tex,1)}
-with(oStone){m3d_model_draw(stone,x,y,tz,0,0,0,1,1,1,global.tex,1)}
+with(oStone){m3d_model_draw(stone,x,y,tz+1,0,0,0,1,1,1,global.tex,1)}
 rim(x,y,1.0,500.0,1,128,165,255,1)
 with(oPot) {m3d_model_draw(pot,x,y,tz+2,0,0,0,1,1,1,global.tex,1)}
 /////////////////DUNGEON//////////////
