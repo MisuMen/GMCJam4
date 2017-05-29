@@ -32,5 +32,6 @@ grass_radius(gras1,999,1054,2,0,8)
 grass_radius(gras1,1045,995,2,0,8)
 grass_radius(gras1,1020,900,2,0,8)
 instance_create(0,0,oBoat)
+instance_create(1100,1100,oMonky)
 
 m3d_model_finish(houses)

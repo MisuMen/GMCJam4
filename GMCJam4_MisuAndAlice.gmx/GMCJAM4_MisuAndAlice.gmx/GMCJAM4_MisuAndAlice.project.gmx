@@ -19,6 +19,7 @@
       <sprite>sprites\sprite5</sprite>
     </sprites>
     <sprite>sprites\spr_me</sprite>
+    <sprite>sprites\sprite25</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -101,6 +102,7 @@
     <object>objects\oStone</object>
     <object>objects\oPot</object>
     <object>objects\oCloud</object>
+    <object>objects\oBalloon</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\room0</room>

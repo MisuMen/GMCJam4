@@ -26,6 +26,7 @@
           <argument>
             <kind>1</kind>
             <string>///CREATE VARIABLES
+GOAL=0
 a=0
 b=0
 x = 940
@@ -58,7 +59,7 @@ active=1
 zheight=0
 global.DUNGEON=0
 global.onboard=0
-global.SAIL=1
+global.SAIL=0
 </string>
           </argument>
         </arguments>
@@ -86,12 +87,15 @@ d3d_set_culling(0)
 draw_set_font(font0)
 audio_play_sound(ms_jollyland,1,1)
 /////////////MODELS////////////////////////
-globalvar land,monkey,monkey2,monkey3,monkey4,monkey5,monkey6,boat,tree1,pot,stone,cloud;
+globalvar land,monkey,monkey2,monkey3,monkey4,monkey5,monkey6,boat,tree1,pot,stone,cloud,ball;
 piso = m3d_model_create()
 tree1 = m3d_model_create();
 gras1 = m3d_model_create();
 stone = m3d_model_create();
 pot = m3d_model_create();
+roy = d3d_model_create();
+ball = m3d_model_create();
+antiroy=d3d_model_create();
 tree(tree1,0,0,8,32,28,12);
 cloud_model()
 terra[0,0] = m3d_model_create();
@@ -107,6 +111,11 @@ monk_pose_5()
 monk_pose_6()
 boat_model()
 
+d3d_model_ellipsoid(roy,-4,-4,4,4,4,-4,1,1,16);
+d3d_model_ellipsoid(antiroy,-4,-4,4,4,4,-4,1,1,16);
+draw_set_colour(255)
+m3d_model_ellipsoid(ball,0,0,0,4,4,5,1,1,12,12)
+m3d_model_ellipsoid(ball,0,0,-3.95,0.5,0.5,0.1,1,1,12,12)
 draw_set_colour(make_colour_rgb(80,25,15));
 m3d_model_ellipsoid(pot,0,0,0,6,6,4,1,1,8,8)
 m3d_model_ellipsoid(pot,0,0,2,3,3,1,1,1,8,8)
@@ -129,7 +138,7 @@ m3d_model_ellipsoid(stone,0,0,0,5,4,2,1,1,5,4)
 draw_set_colour(c_white)
 /////////////DUNGEONS///////////////
 dungeon1_create()
-
+m3d_model_finish(ball)
 m3d_model_finish(piso)
 m3d_model_finish(monkey)
 m3d_model_finish(tree1)
@@ -399,7 +408,6 @@ if point_distance_3d(x,y,z+10,bx,by,6)&lt;32
 {
  if mouse_check_button_pressed(mb_left)
  {
- show_debug_message("HEY NOW")
   if (global.SAIL)
   {
    //get in the boat
@@ -412,7 +420,7 @@ if point_distance_3d(x,y,z+10,bx,by,6)&lt;32
   {
   if global.dialogue_active == 0
   {
-   dialogue_create("What are you waiting for?", "GO GET THE GAS!!!", "I need that thing inside me already!");
+   dialogue_create("...", "... ...", "... - Luke Skywalker");
    global.dialogue_active = 1
   }
   }
@@ -420,6 +428,49 @@ if point_distance_3d(x,y,z+10,bx,by,6)&lt;32
  if (x&gt;4)&amp;&amp;(x&lt;2048)&amp;&amp;(y&gt;4)&amp;&amp;(y&lt;2048){if (mouse_check_button_pressed(mb_right) &amp;&amp; global.onboard)
  {if (collision_radio()){global.onboard=0; spd=0.5}}}
 }
+if point_distance(x,y,1000,1000)&lt;16
+{
+ if mouse_check_button_pressed(mb_left)
+ {
+  if (global.SAIL)
+   {
+    if (GOAL)
+    {
+       if global.dialogue_active == 0
+       {
+        dialogue_create("YOU DID IT!", "...", "There is nothing left for youy to do. Go now!");
+         global.dialogue_active = 1
+       }
+    }else
+    {
+     if global.dialogue_active == 0
+     {
+      dialogue_create("Not enough balloons!", "Keep looking for more!", "Dont give up now!");
+      global.dialogue_active = 1
+     }
+    }
+   }
+   else
+   {
+  if global.dialogue_active == 0
+  {
+   dialogue_create("Oh no! All my balloons are gone for the Jersey's annual meme festival later.", "You! Can you go to the ocean and find them for me?", "Its just 30 of them scattered! Quick go get them!");
+   global.dialogue_active = 1; global.SAIL=1; spawn2()
+  }
+  }
+  }
+  }
+ if point_distance(x,y,1075,975)&lt;16
+{
+ if mouse_check_button_pressed(mb_left)
+ {
+  if global.dialogue_active == 0
+       {
+        dialogue_create("Dont mind the monkey", "he just like chasing everyone.", "He'll even swim after you.");
+         global.dialogue_active = 1
+       }
+ }
+ }
 </string>
           </argument>
         </arguments>
@@ -452,6 +503,7 @@ if (aka &amp;&amp; active)
  swingy=-135
  alarm[1]=10
 }
+if instance_number(oBalloon)==0 {GOAL=1}
 if (global.DUNGEON==0)
 {
 //if (x&gt;4)&amp;&amp;(x&lt;4092){if (y&gt;4)&amp;&amp;(y&lt;4092){a=floor(x/2048); b=floor(y/2048)}}
@@ -485,7 +537,11 @@ if y&lt;0 {y=4095}
             <kind>1</kind>
             <string>m3d_model_destroy(boat)
 audio_stop_all()
-//m3d_model_destroy(sea)
+d3d_model_clear(roy)
+d3d_model_destroy(roy)
+d3d_model_clear(antiroy)
+d3d_model_destroy(antiroy)
+m3d_model_destroy(ball)
 m3d_model_destroy(piso)
 m3d_model_destroy(gras1)
 m3d_model_destroy(tree1)
@@ -535,6 +591,7 @@ m3d_end()
             <kind>1</kind>
             <string>///Draw 2D GUI here
 draw_text(4,4,"X: "+string(x)+"  Y: "+string(y))
+if global.SAIL draw_text(400,4,"Balloons: "+string(instance_number(oBalloon)))
 </string>
           </argument>
         </arguments>
@@ -566,7 +623,19 @@ m3d_model_draw(terra[0,0],2048,0,0,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(terra[0,0],0,2048,0,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(terra[0,0],2048,2048,0,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(houses,0,0,0,0,0,0,1,1,1,global.tex,1)
-
+with(oBalloon){m3d_model_draw(ball,x,y,9,0,0,0,1,1,1,global.tex,1)}
+var tz = m3d_get_height(land[0,0],1000,1000,2048,2048,1,1,0,0,1);
+d3d_transform_set_identity()
+d3d_transform_add_rotation_z(point_direction(1000,1000,x,y)+180)
+d3d_transform_add_translation(1000,1000,tz+12)
+d3d_model_draw(roy,0,0,0,tex3)
+d3d_transform_set_identity()
+d3d_transform_set_identity()
+d3d_transform_add_rotation_z(point_direction(1075,975,x,y)+180)
+tz = m3d_get_height(land[0,0],1075,975,2048,2048,1,1,0,0,1);
+d3d_transform_add_translation(1075,975,tz+12)
+d3d_model_draw(antiroy,0,0,0,tex2)
+d3d_transform_set_identity()
 with(oBoat){m3d_model_draw(boat,x,y,4,0,0,-dir,1,1,1,global.tex,1)}
 
 rim(x,y,1.0,500.0,1,128,165,255,1)
