@@ -29,14 +29,18 @@
 a=0
 b=0
 x = 940
-y = 800
+y = 850
+//////////////
+//x = -8000+420;
+//y = 0+540;
+//////////////
 z = 0
 dir=0
 ang=8
 len=24
 rot=0
 atk=0
-spd = 0.3
+spd = 0.5
 hsp = 0
 vsp = 0
 dsp = 0
@@ -52,8 +56,9 @@ swingx=0
 swingy=0
 active=1
 zheight=0
-
-global.SAIL=0
+global.DUNGEON=0
+global.onboard=0
+global.SAIL=1
 </string>
           </argument>
         </arguments>
@@ -79,7 +84,6 @@ m3d_start()
 d3d_set_hidden(1)
 d3d_set_culling(0)
 draw_set_font(font0)
-instance_create(0,0,oMask_0_1)
 /////////////MODELS////////////////////////
 globalvar land,monkey,monkey2,monkey3,monkey4,monkey5,monkey6,boat,tree1,pot,stone,cloud;
 piso = m3d_model_create()
@@ -110,16 +114,19 @@ m3d_model_ellipsoid(pot,0,0,2,3,3,1,1,1,8,8)
 draw_set_colour(make_colour_rgb(90,100,255));
 m3d_model_floor(piso,-1024,-1024,0,5120,5120,0,1,1,0);
 //d3d_model_terrain(sea,sprite1,0,0,0,512,512,0.1,8,8,1,1);
-draw_set_colour(make_colour_rgb(60,255,70))
-land[0,0]=m3d_model_terrain(terra[0,0],sprite0,0,0,0,2048,2048,1,64,64,1,1);
+
+draw_set_colour(c_white)
 land[0,1]=m3d_model_terrain(terra[0,1],sprite3,0,0,0,2048,2048,1,64,64,1,1);
 land[1,0]=m3d_model_terrain(terra[1,0],sprite4,0,0,0,2048,2048,1,64,64,1,1);
 land[1,1]=m3d_model_terrain(terra[1,1],sprite5,0,0,0,2048,2048,1,64,64,1,1);
+land[0,0]=m3d_model_terrain(terra[0,0],sprite4,0,0,0,2048,2048,8,64,64,1,1);
+
 ///STONE
 draw_set_colour(c_silver)
 m3d_model_ellipsoid(stone,0,0,0,5,4,2,1,1,5,4)
 draw_set_colour(c_white)
-//////////////////////////
+/////////////DUNGEONS///////////////
+dungeon1_create()
 
 m3d_model_finish(piso)
 m3d_model_finish(monkey)
@@ -244,20 +251,37 @@ active=1
           <argument>
             <kind>1</kind>
             <string>///Movements and Rotations
-
 //dialogue lock
 if (!instance_exists(oDialogue)) {
 
-zheight = m3d_get_height(land[a,b],x,y,2048,2048,64,64,0,0,1);
-var ang1 = -sign(mouse_x-(window_get_width()/2))*(mouse_x&lt;&gt;(window_get_width()/2));
-var ang2 = -sign(mouse_y-(window_get_height()/2))*(mouse_y&lt;&gt;(window_get_height()/2));
-//var angp = point_distance(mouse_x,mouse_y,window_get_width()/2,window_get_height()/2);
-dir -= ang1*2;//(keyboard_check(vk_left)-keyboard_check(vk_right));
-dir = dir mod 360
-if (ang&lt;=-5) {ang=-4}
-if (ang&gt;=70) {ang=69}
-ang -= ((ang2*2)*(ang&gt;-5)*(ang&lt;70));//(keyboard_check(vk_up)*(ang&lt;89))-(keyboard_check(vk_down)
+var _mx, _my, _mousew, _mouseh;
+var _hsense = 0.25;
+var _vsense = 0.25;
+if (window_get_fullscreen())
+{
+_mx = display_mouse_get_x();
+_my = display_mouse_get_y();
+_mousew = display_get_width();
+_mouseh = display_get_height();
+}
+else
+{
+_mx = window_mouse_get_x();
+_my = window_mouse_get_y();
+_mousew = window_get_width();
+_mouseh = window_get_height();
+}
+if (keyboard_check_pressed(ord('M'))) show_debug_message(string(_mousew) + "," + string(_mouseh));
 
+zheight = m3d_get_height(land[a,b],x,y,2048,2048,64,64,0,0,1);
+
+// horizontal rotation
+dir += clamp(_hsense * (_mx - _mousew/2), -15, 15);
+dir += 360;
+dir = dir mod 360;
+
+// vertical rotation
+ang = clamp(ang + _vsense * (_my - _mouseh/2), -5, 70);
 var kp1 = (keyboard_check(ord('W'))-keyboard_check(ord('S')))*spd;
 var kp2 = (keyboard_check(ord('A'))-keyboard_check(ord('D')))*spd;
 
@@ -268,12 +292,15 @@ vsp = lengthdir_y(kp1,-dir);
 }
 else
 {
-hsp = lengthdir_x(kp2,-dir+(90));
-vsp = lengthdir_y(kp2,-dir+(90));
+hsp = lengthdir_x(kp2*(1-global.onboard),-dir+(90));
+vsp = lengthdir_y(kp2*(1-global.onboard),-dir+(90));
 }
 
 }
+
 //////////////////PHYSICS////////////////////////////
+if (global.onboard==0)
+{
 if (dsp&lt;8) dsp-=grav
 if (z+dsp &lt; zheight)
 {
@@ -283,37 +310,63 @@ if (z+dsp &lt; zheight)
  }
  jump=0
  dsp=0
- spd=0.3
+ spd=0.5
  z = zheight
-}
+}}else{z=4}
 //////Jump//////
 ////////////////
 
 //dialogue lock
 if (!instance_exists(oDialogue)) {
-
- if (place_meeting(x-hsp,y,oSolid))
+if (global.onboard==0)
+{
+var checkerx = m3d_get_height(land[a,b],x-hsp,y,2048,2048,64,64,0,0,1);
+var checkery = m3d_get_height(land[a,b],x,y-vsp,2048,2048,64,64,0,0,1);
+ if checkerx&lt;=0//(place_meeting(x-hsp,y,oSolid))&amp;&amp;(checker
  {
-  while(!place_meeting(x-(sign(hsp)*(1/10000)),y,oSolid))
+  while(m3d_get_height(land[a,b],x-(sign(hsp)*(1/10000)),y,2048,2048,64,64,0,0,1)&gt;0)//(!place_meeting(x-(sign(hsp)*(1/10000)),y,oSolid)&amp;&amp;)
   {
    x -= (sign(hsp)*(1/10000));
   }
   hsp=0
  }
- if (place_meeting(x,y-vsp,oSolid))
+ if (checkery&lt;=0)//(place_meeting(x,y-vsp,oSolid))
  {
-  while(!place_meeting(x,y-(sign(vsp)*(1/10000)),oSolid))
+  while(m3d_get_height(land[a,b],x,y-(sign(vsp)*(1/10000)),2048,2048,64,64,0,0,1)&gt;0)//!place_meeting(x,y-(sign(vsp)*(1/10000)),oSolid))
   {
    y -= (sign(vsp)*(1/10000));
   }
   vsp=0
  }
+}
+else
+{
+var checkerx = m3d_get_height(land[a,b],x-hsp,y,2048,2048,64,64,0,0,1);
+var checkery = m3d_get_height(land[a,b],x,y-vsp,2048,2048,64,64,0,0,1);
+ if checkerx&gt;0//(place_meeting(x-hsp,y,oSolid))&amp;&amp;(checker
+ {
+  while(m3d_get_height(land[a,b],x-(sign(hsp)*(1/10000)),y,2048,2048,64,64,0,0,1)&lt;=0)//(!place_meeting(x-(sign(hsp)*(1/10000)),y,oSolid)&amp;&amp;)
+  {
+   x -= (sign(hsp)*(1/10000));
+  }
+  hsp=0
+ }
+ if (checkery&gt;0)//(place_meeting(x,y-vsp,oSolid))
+ {
+  while(m3d_get_height(land[a,b],x,y-(sign(vsp)*(1/10000)),2048,2048,64,64,0,0,1)&lt;=0)//!place_meeting(x,y-(sign(vsp)*(1/10000)),oSolid))
+  {
+   y -= (sign(vsp)*(1/10000));
+  }
+  vsp=0
+ }
+}
  x-=hsp
  y-=vsp
  z+=dsp
 
 /////////////////////////////////////////////////////
-window_mouse_set(window_get_width()/2,window_get_height()/2)
+if (window_get_fullscreen()) display_mouse_set(_mousew/2,_mouseh/2)
+else window_mouse_set(_mousew/2, _mouseh/2);
 }
 </string>
           </argument>
@@ -339,13 +392,18 @@ window_mouse_set(window_get_width()/2,window_get_height()/2)
 ///Boat
 var bx=oBoat.x;
 var by=oBoat.y;
-if point_distance_3d(x,y,z,bx,by,6)&lt;12
+if point_distance_3d(x,y,z+10,bx,by,6)&lt;32
 {
  if mouse_check_button_pressed(mb_left)
  {
+ show_debug_message("HEY NOW")
   if (global.SAIL)
   {
    //get in the boat
+   x = oBoat.x;
+   y = oBoat.y;
+   global.onboard=1
+   spd=1;
   }
   else
   {
@@ -356,6 +414,7 @@ if point_distance_3d(x,y,z,bx,by,6)&lt;12
   }
   }
  }
+ if (mouse_check_button_pressed(mb_right) &amp;&amp; global.onboard){if (collision_radio()){global.onboard=0; spd=0.5}}
 }
 </string>
           </argument>
@@ -389,12 +448,14 @@ if (aka &amp;&amp; active)
  swingy=-135
  alarm[1]=10
 }
-
+if (global.DUNGEON==0)
+{
 if (x&gt;4)&amp;&amp;(x&lt;4092){if (y&gt;4)&amp;&amp;(y&lt;4092){a=floor(x/2048); b=floor(y/2048)}}
 if x&gt;4096 {x=1}
 if x&lt;0 {x=4095}
 if y&gt;4096 {y=1}
 if y&lt;0 {y=4095}
+}
 }
 </string>
           </argument>
@@ -437,6 +498,7 @@ m3d_model_destroy(terra[0,0])
 m3d_model_destroy(terra[0,1])
 m3d_model_destroy(terra[1,0])
 m3d_model_destroy(terra[1,1])
+m3d_model_destroy(dungeon1)
 
 pose_clear()
 buffer_delete(land[0,0])
@@ -494,13 +556,16 @@ draw_text(4,4,"X: "+string(x)+"  Y: "+string(y))
 shader_set(shd_depth)
 rim(x,y,1.0,500.0,-1,128,165,255,1)
 m3d_model_draw(piso,0,0,4,0,0,0,1,1,1,global.tex,1)
-m3d_model_draw(terra[a,b],0,0,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[0,0],0,0,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[0,1],0,2048,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[1,0],2048,0,0,0,0,0,1,1,1,global.tex,1)
+m3d_model_draw(terra[1,1],2048,2048,0,0,0,0,1,1,1,global.tex,1)
 m3d_model_draw(houses,0,0,0,0,0,0,1,1,1,global.tex,1)
 
-with(oBoat){m3d_model_draw(boat,boatx,boaty,4,0,0,-dir,1,1,1,global.tex,1)}
+with(oBoat){m3d_model_draw(boat,x,y,4,0,0,-dir,1,1,1,global.tex,1)}
 
 rim(x,y,1.0,500.0,1,128,165,255,1)
-if (keyboard_check(ord('W'))||keyboard_check(ord('S')))
+if (keyboard_check(ord('W'))||keyboard_check(ord('S')))&amp;&amp;(global.onboard==0)
 {
 if (keyboard_check(ord('W'))) frame+=0.25
 if (keyboard_check(ord('S'))) frame-=0.25
@@ -531,7 +596,8 @@ with(oTree) {m3d_model_draw(tree1,x,y,tz-1,0,0,0,1,1,1,global.tex,1)}
 with(oStone){m3d_model_draw(stone,x,y,tz,0,0,0,1,1,1,global.tex,1)}
 rim(x,y,1.0,500.0,1,128,165,255,1)
 with(oPot) {m3d_model_draw(pot,x,y,tz+2,0,0,0,1,1,1,global.tex,1)}
-
+/////////////////DUNGEON//////////////
+m3d_model_draw(dungeon1,0,0,0,0,0,0,1,1,1,global.tex,1)
 ////Leave this last
 m3d_model_draw(gras1,0,0,-1,0,0,0,1,1,1,tex1,1)
 shader_reset()

@@ -78,6 +78,8 @@
     <script>scripts\boat_model.gml</script>
     <script>scripts\spawn1.gml</script>
     <script>scripts\cloud_model.gml</script>
+    <script>scripts\dungeon1_create.gml</script>
+    <script>scripts\collision_radio.gml</script>
   </scripts>
   <shaders name="shaders">
     <shader type="GLSLES">shaders\shd_depth.shader</shader>
@@ -88,7 +90,7 @@
   <objects name="objects">
     <objects name="CollisionMasks">
       <object>objects\oSolid</object>
-      <object>objects\oMask_0_1</object>
+      <object>objects\oSolid2</object>
     </objects>
     <object>objects\oCam</object>
     <object>objects\oMonky</object>

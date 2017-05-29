@@ -21,6 +21,7 @@ var sf = surface_create(w,h);
 var buff = buffer_create((((w+1)*(h+1))*4),buffer_grow,1);
 var height = argument7;
 ///set up surface
+draw_set_colour(c_white)
 surface_set_target(sf)
 draw_clear(0)
 draw_sprite(argument1,0,0,0)
@@ -29,6 +30,7 @@ surface_reset_target()
 buffer_get_surface(buff,sf,0,0,0)
 surface_free(sf)
 ///TOP
+draw_set_colour(make_colour_rgb(60,255,70))
 repeat(argument9)
 {
  repeat(argument8)
